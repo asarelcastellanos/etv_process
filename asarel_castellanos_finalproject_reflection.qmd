@@ -1,0 +1,49 @@
+---
+title: "Reflections"
+format: html
+---
+
+### **What I Learned:**
+
+One of the main takeaways from Shiny is that, under the hood, it is essentially HTML and CSS. This realization gave me a lot of confidence for my final project because if I didn’t like the way things looked, I could just inject some CSS and HTML to get them exactly how I wanted. This allowed me to insert divs and add elements like strong and style to customize the appearance of my Shiny app.
+
+Another major learning moment came when I was struggling to figure out how to load the nba_goats.xlsx file into both the first section and the ggplot section. Ultimately, I discovered:
+
+```         
+MJ_df <- reactive({
+    req(file.exists(here("www", "nba_goats.xlsx")))
+    read_xlsx(here("www", "nba_goats.xlsx")) %>%
+      mutate(
+        Season = fct_relevel(Season, 
+                             "season_1", "season_2", "season_3", "season_4", "season_5", 
+                             "season_6", "season_7", "season_8", "season_9", "season_10",
+                             "season_11", "season_12", "season_13", "season_14", "season_15"),
+        Game_Location = as.factor(Game_Location),
+        Game_Outcome = as.factor(Game_Outcome),
+        Opp = as.factor(Opp),
+        GS = as.factor(GS)
+      )
+})
+```
+
+According to the Shiny documentation, a **reactive expression** is “a bit smarter than regular R functions. They cache their values and know when their values have become outdated.” This is incredibly useful because it means I can run this code once and use it for both the **Data Extraction** and **Data Visualization** sections.
+
+**How I Used AI (ChatGPT):**
+
+One of the main ways I used ChatGPT was to help me find R/Shiny documentation for specific parts of my project. For example, if I wanted to know how to customize dynamic tables from the **DT** library, I would prompt ChatGPT with something like: *“Show me R or Shiny documentation that explains how to customize a dynamic table.”* As someone with a software engineering background, I always go to the documentation for my answers, and ChatGPT has made searching for them a lot easier.
+
+Another way I used ChatGPT was to ask it to compare and contrast different approaches. During my project-building phase, I came across renderUI. I asked ChatGPT for advice on whether renderUI or conditionalPanel would be better. ChatGPT provided insights on when to use each one.
+
+Lastly, if you look at my **ggplot** server code, you’ll see a lot of if/else if/else statements followed by additions that extend the original ggplot. ChatGPT taught me how to conditionally add elements to a **ggplot**, which was very helpful.
+
+**Challenges and Insights:**
+
+One of the hardest parts was the **ggplot** section. My vision for this section was that users could check boxes and select options, and the plot would update in real time. This became a large task because I realized it would require a lot of conditional statements to add certain aesthetics based on user input. Ultimatyely I am happy with the outcome but this required a lot of trial and error and asking ChatGPT to double check my work and offer suggestions for how I could simplify the code.
+
+One major insight is that I would create seperate files for my server and my UI code because having it in one file is definetly not scalable. My codebase balloned to about 1000 lines of code with most of it being in the UI section. This is because I reused the same structure over and over again (i.e sidePanel and mainPanel).
+
+**How This Project Helped Me Relearn Key Course Concepts:**
+
+This project forced me to look back at all the notes we took throughout the whole class. This is because there was a lot of code and syntax I could use as a base and build off that for my examples in my final project. The notes were also great support because it helped me come with an idea of how to structure the project (i.e Data Extraction, then Data Transformation, then Data Visualization) and that's ultimately the structure I chose as well.
+
+Another way this helped me relearn concepts was that not only did I have to build out the project myself but I also thought it would be a cool idea to include R code and show that to the user as well. This forced me to think about best ways to present code to others. The R code I showed to the users was also ultimately the code I used myself to show the output and results of the extraction, transformations and visualizations.

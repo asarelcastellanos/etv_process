@@ -11,6 +11,9 @@ library(here)
 library(readxl)
 library(tidyr)
 library(dplyr)
+library(stringr)
+library(forcats)
+library(purrr)
 library(ggplot2)
 library(DT)
 
@@ -711,15 +714,13 @@ ui <- fluidPage(
     )
     
     # End of Statistics
-    
-    
   )
 )
 
 server <- function(input, output, session) {
   
   MJ_df <- reactive({
-    req(file.exists(here("www", "nba_goats.xlsx")))  # Ensure file exists
+    req(file.exists(here("www", "nba_goats.xlsx")))
     read_xlsx(here("www", "nba_goats.xlsx")) %>%
       mutate(
         Season = fct_relevel(Season, 
@@ -757,7 +758,7 @@ server <- function(input, output, session) {
   class = "compact display")
   
   output$scrape_code <- renderText({"url <- \"https://en.wikipedia.org/wiki/List_of_U.S._states_and_territories_by_GDP\" \ndata <- htmltab::htmltab(doc = url, which = 1)\nprint(data)"})
-  output$csv_code <- renderText({"data <- read_xlsx(\"nba_gaots.xlsx\") \nprint(data)"})
+  output$csv_code <- renderText({"data <- read_xlsx(\"nba_goats.xlsx\") \nprint(data)"})
   
   # End of Data Extraction
   
@@ -883,12 +884,12 @@ server <- function(input, output, session) {
       updateSelectInput(session, "x_var", 
                         choices = c("Season" = "Season", "Game Location" = "Game_Location", 
                                     "Game Outcome" = "Game_Outcome", "Opponent" = "Opp", "Games Started" = "GS"),
-                        selected = "Season")  # Reset to categorical option
+                        selected = "Season")
     } else {
       updateSelectInput(session, "x_var", 
                         choices = c("Game Score" = "GmSc", "Points" = "PTS", 
                                     "Assists" = "AST", "Field Goal %" = "FG_Percent", "Minutes Played" = "MP"),
-                        selected = "GmSc")  # Reset to numeric option
+                        selected = "GmSc")
     }
   })
   
